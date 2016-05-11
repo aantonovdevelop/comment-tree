@@ -1,0 +1,28 @@
+{
+  "name": "comment-tree",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aantonovdevelop/comment-tree.git"
+  },
+  "author": "Artem Antonov <aantonov.develop@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/aantonovdevelop/comment-tree/issues"
+  },
+  "homepage": "https://github.com/aantonovdevelop/comment-tree#readme",
+  "dependencies": {
+    "body-parser": "^1.15.1",
+    "express": "^4.13.4",
+    "mongoose": "^4.4.16"
+  },
+  "devDependencies": {
+    "mocha": "^2.4.5",
+    "supertest": "^1.2.0"
+  }
+}
