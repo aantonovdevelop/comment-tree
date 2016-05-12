@@ -19,7 +19,9 @@
   "dependencies": {
     "body-parser": "^1.15.1",
     "express": "^4.13.4",
-    "mongoose": "^4.4.16"
+    "md5": "^2.1.0",
+    "mongoose": "^4.4.16",
+    "rand-token": "^0.2.1"
   },
   "devDependencies": {
     "coveralls": "^2.11.9",
