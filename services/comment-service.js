@@ -14,6 +14,15 @@ class CommentService {
         return this._maximum_nesting_lvl;
     }
 
+    /**
+     * Create new commentary
+     * 
+     * @param {Object} user User model instance
+     * @param {String} message Commentary message
+     * @param {String} parent ID of parent commentary
+     * 
+     * @returns {Promise}
+     */
     create_comment(user, message, parent) {
         return new Promise((resolve, reject) => {
             get_level.call(this, parent, (err, level) => {
@@ -34,6 +43,13 @@ class CommentService {
             });
         });
 
+        /**
+         * Get level of commentary nesting
+         * 
+         * @param {String} parent Parent commentary ID
+         * @param {Function} callback
+         * @param {Number} level
+         */
         function get_level(parent, callback, level = 1) {
             this.model.get_parent(parent)
                 .then(parent => {
