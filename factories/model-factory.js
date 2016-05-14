@@ -13,13 +13,6 @@ class ModelFactory {
     constructor (mongoose, name, schema) {
         this.model = mongoose.model(name, schema);
     }
-    
-    /**
-     * Create instance of model
-     */
-    create_instance (schema) {
-        return new this.model(schema);
-    };
 
     /**
      * Get message model
