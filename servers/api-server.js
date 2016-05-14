@@ -17,6 +17,8 @@ class APIServer extends EventEmitter {
          * @apiParam (JSON) {String} first_name
          * @apiParam (JSON) {String} last_name
          * @apiParam (JSON) {String} email
+         * @apiParam (JSON) {String} username
+         * @apiParam (JSON) {String} password
          */
         app.post('/user', check_params.bind(undefined, {
             body: {
@@ -38,8 +40,8 @@ class APIServer extends EventEmitter {
          * @api {post} /token Get access token
          * @apiGroup Authorization
          * 
-         * @apiParam (JSON) {String} username User login
-         * @apiParam (JSON) {String} password MD5 password hash 
+         * @apiParam (JSON) {String} username
+         * @apiParam (JSON) {String} password 
          */
         app.post('/token', check_params.bind(undefined, {
             body: {
@@ -53,6 +55,7 @@ class APIServer extends EventEmitter {
          * @apiGroup Commentary
          * 
          * @apiParam (JSON) {String} message
+         * @apiParam (JSON) {String} [parent] ID of parent commentary
          */
         app.post('/comment', authentication, check_params.bind(undefined, {
             body: {
