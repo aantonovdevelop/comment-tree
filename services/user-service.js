@@ -30,7 +30,6 @@ class UserService {
         }
     }
     
-    
     get_users() {
         return this.user_model.get_all();
     }
