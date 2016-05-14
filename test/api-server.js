@@ -7,12 +7,16 @@ var app = express();
 var APIServer = require('../servers/api-server');
 var api_server = undefined;
 
+var authentication = function (req, res, next) {
+    next();
+};
+
 describe('APIServer', function () {
     describe('#constructor', function () {
         it('Should create APIServer instance', function () {
             app.use(body_parser.json());
 
-            api_server = new APIServer(app);
+            api_server = new APIServer(app, authentication);
 
             assert.ok(api_server instanceof APIServer);
         });
@@ -50,7 +54,9 @@ describe('APIServer', function () {
                 .send(JSON.stringify({
                     first_name: 'Buddy',
                     last_name: 'Goodman',
-                    email: 'buddy@addr.com'
+                    email: 'buddy@addr.com',
+                    username: 'buddy',
+                    password: 'pss2wd'
                 }))
                 .expect(200).end(function (err) {
                     if (err) done(err);
