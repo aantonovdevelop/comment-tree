@@ -16,7 +16,7 @@ var comment_schema = new Schema(comment);
 
 comment_schema.statics.get_parent = function (id) {
     return this.model('Comment').findOne({_id: id})
-        .then((parent) => parent.parent);
+        .then((parent) => (parent) ? parent.parent : undefined);
 };
 
 comment_schema.statics.get_by_id = function (id) {
