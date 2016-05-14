@@ -1,6 +1,7 @@
 "use strict";
 
 var ObjectId = require('mongoose').Schema.Types.ObjectId;
+var Schema = require('mongoose').Schema;
 
 var comment = {
     message: String,
@@ -9,7 +10,21 @@ var comment = {
         type: ObjectId,
         ref: 'Comment'
     }
-    
 };
 
-module.exports = comment;
+var comment_schema = new Schema(comment);
+
+comment_schema.statics.get_parent = function (id) {
+    return this.model('Comment').findOne({_id: id})
+        .then((parent) => parent.parent);
+};
+
+comment_schema.statics.get_by_id = function (id) {
+    return this.model('Comment').findOne({_id: id});
+};
+
+comment_schema.statics.get_all = function () {
+    return this.model('Comment').find();
+};
+
+module.exports = comment_schema;

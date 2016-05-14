@@ -1,20 +1,32 @@
 "use strict";
 
 class CommentService {
-    constructor (commentFactory) {
-        this.comment_factory = commentFactory;
+    constructor (maximumNesting, commentFactory) {
+        this.nesting_level = maximumNesting;
+        this.model = commentFactory.get_model();
+    }
+    
+    set nesting_level(lvl) {
+        this._maximum_nesting_lvl = (lvl > 0 && lvl < 10) ? lvl : 4;
+    }
+    
+    get nesting_level() {
+        return this._maximum_nesting_lvl;
     }
 
     create_comment(user, message, parent) {
         return new Promise((resolve, reject) => {
             get_level.call(this, parent, (err, level) => {
                 if (err) return reject(err);
-                if (level >= 4) return reject(new Error('Maximum level of nesting'));
+                if (level >= this._maximum_nesting_lvl) 
+                    return reject(new Error('Maximum level of nesting'));
 
-                this.comment_factory.create_instance({
-                    message: message,
+                var comment = new this.model({
+                    message:message,
                     parent: parent
-                }).save().then(message => {
+                });
+                
+                comment.save().then(message => {
                     user.comments.push(message._id);
                     user.save().then(resolve);
                 });
@@ -23,12 +35,11 @@ class CommentService {
         });
 
         function get_level(parent, callback, level = 0) {
-            this.comment_factory.get_model()
-                .findOne({_id: parent})
-                .then(comment => {
-                    if (comment.parent) {
+            this.model.get_parent(parent)
+                .then(parent => {
+                    if (parent) {
                         level ++;
-                        get_level.call(this, comment.parent, callback, level);
+                        get_level.call(this, parent, callback, level);
                     } else {
                         callback(null, level);
                     }
@@ -38,7 +49,7 @@ class CommentService {
 
     
     get_comments() {
-        return this.comment_factory.get_model().find();
+        return this.model.get_all();
     }
 }
 
