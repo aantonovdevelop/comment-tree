@@ -1,6 +1,7 @@
 "use strict";
 
 var ObjectId = require('mongoose').Schema.Types.ObjectId;
+var Schema = require('mongoose').Schema;
 
 var token = {
     token: String,
@@ -15,4 +16,11 @@ var token = {
     }
 };
 
-module.exports = token;
+var token_schema = new Schema(token);
+
+token_schema.statics.get_attached_user = function (token) {
+    return this.model('Token').findOne({token: token}).populate('user')
+        .then(token => (token) ? token.user : null);
+};
+
+module.exports = token_schema;
