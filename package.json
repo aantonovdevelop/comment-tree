@@ -6,6 +6,10 @@
   "engines": {
     "node": ">=6.1.0"
   },
+  "config": {
+    "mongodb": "mongodb://localhost/test",
+    "nesting_level": 4
+  },
   "scripts": {
     "start": "node index.js",
     "test": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"

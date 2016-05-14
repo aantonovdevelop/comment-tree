@@ -1,9 +1,11 @@
 "use strict";
 
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/test');
+var config = require('../package.json').config,
+    mongoose = require('mongoose');
 
-var app = require('./app')(mongoose);
+mongoose.connect(config.mongodb);
+
+var app = require('./app')(config, mongoose);
 
 app.listen(3000, function () {
     console.log('Server started on %d port', 3000);

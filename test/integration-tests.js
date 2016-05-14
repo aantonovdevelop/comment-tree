@@ -3,14 +3,15 @@
 var request = require('supertest'),
     assert = require('assert'),
     mongoose = require('mongoose'),
-    mongoose_mock = require('mockgoose');
+    mongoose_mock = require('mockgoose'),
+    config = require('../package.json').config;
 
 var app = undefined;
 var wrapper = undefined;
 
 before('Mongoose mocking', function () {
     mongoose_mock(mongoose).then(function () {
-        mongoose.connect('mongodb://localhost/test');
+        mongoose.connect(config.mongodb);
     });
 });
 
@@ -21,7 +22,7 @@ describe('Integration', function () {
     
     describe('#Application', function () {
         it('Should return express application instance', function () {
-            app = require('../app/app')(mongoose);
+            app = require('../app/app')(config, mongoose);
             
             assert.ok(app);
             wrapper = require('./wrappers/api-wrapper')(app);
