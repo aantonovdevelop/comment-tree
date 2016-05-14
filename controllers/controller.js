@@ -17,7 +17,7 @@ module.exports = function (server, services) {
 
     server.on('get_access_token', function (req, res) {
         services.authorization_service.get_token(req.body.username, req.body.password)
-            .then((token) => res.send(token)).catch(() => res.sendStatus(403))
+            .then((token) => res.send({token: token.token})).catch(() => res.sendStatus(403))
     });
 
     server.on('get_all_users', function (req, res) {
