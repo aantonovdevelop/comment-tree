@@ -6,7 +6,7 @@ var CommentService = require('../services/comment-service'),
     comment_factory = require('./mocks/comment-factory');
 
 var comment_service = undefined,
-    maximum_nesting_lvl = 5;
+    maximum_nesting_lvl = 6;
 
 describe('CommentService', function () {
     describe('#constructor', function () {
@@ -44,7 +44,11 @@ describe('CommentService', function () {
             comment_service.nesting_level = maximum_nesting_lvl;
             
             comment_service.create_comment(user, "some message", 1)
-                .then(done).catch(done);
+                .then(() => {
+                    assert.equal(user.comments.length, 1);
+                    
+                    done();
+                }).catch(done);
         });
         
         it('Should throw error of nesting level', function (done) {
