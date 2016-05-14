@@ -5,44 +5,32 @@ var rand_token = require('rand-token');
 
 class AuthorizationService {
     constructor (accountFactory, tokenFactory) {
-        this.account_factory = accountFactory;
-        this.token_factory = tokenFactory;
+        this.account_model = accountFactory.get_model();
+        this.token_model = tokenFactory.get_model();
     }
 
     get_token(username, password) {
-        return this.account_factory.get_model().findOne({
-            username: username,
-            password: md5(password)
-        }).then(account => {
-            if (account) {
-                var token = {
-                    account: account._id,
-                    user: account.user,
-                    token: rand_token.generate(32)
-                };
-
-                return this.token_factory.create_instance(token).save().then(() => {
-                    return Promise.resolve(token.token);
-                }).catch(err => {
-                    return Promise.reject(err);
-                });
-            } else {
-                return Promise.reject(new Error('Wrong username or password'));
-            }
-        }).catch(err => {
-            return Promise.reject(err);
-        });
+        return this.account_model.authorize(username, md5(password))
+            .then(account => {
+                if (account) return create_token.call(this, account);
+                else return Promise.reject(new Error('Wrong username or password'));
+            });
+        
+        function create_token(account) {
+            var token = new this.token_model({
+                account: account._id,
+                user: account.user,
+                token: rand_token.generate(32)
+            });
+            
+            return token.save();
+        }
     }
     
-
     get_user(token) {
-        return this.token_factory.get_model().findOne({
-            token: token
-        }).populate('user').then(token => {
-            if (token) return Promise.resolve(token.user);
+        return this.token_model.get_attached_user(token).then((user) => {
+            if (user) return Promise.resolve(user);
             else return Promise.reject(new Error('Token has expired'));
-        }).catch(err => {
-            return Promise.reject(err);
         });
     }
 }

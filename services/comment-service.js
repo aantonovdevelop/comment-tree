@@ -28,13 +28,13 @@ class CommentService {
                 
                 comment.save().then(message => {
                     user.comments.push(message._id);
-                    user.save().then(resolve);
+                    user.save().then(() => resolve(message));
                 });
 
             });
         });
 
-        function get_level(parent, callback, level = 0) {
+        function get_level(parent, callback, level = 1) {
             this.model.get_parent(parent)
                 .then(parent => {
                     if (parent) {
