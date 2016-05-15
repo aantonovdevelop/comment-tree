@@ -13,6 +13,7 @@
 ```bash
     $ npm install
     $ npm test
+    $ npm start
 ```
 
 # Requirements
